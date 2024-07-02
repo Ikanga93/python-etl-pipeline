@@ -57,12 +57,12 @@ def extract_data_from_csv():
         column_names = ["Rowid", "Timestamp", "Anonymized_vehicle_number", "Vehicle_type", "Number_of_axles", "Vehicle_code"]
         # Reading the csv file.
         data = pd.read_csv(csv_file_path, names=column_names)
-        logging.info("Reading CSV file from: %s", csv_file_path)
+        logging.info("CSV file successfully read from: %s", csv_file_path)
         # For this data, we only need the first 4 columns. That is why i first named the columns to safely remove the columns I do not need.
         data = data.drop(["Number_of_axles", "Vehicle_code"], axis=1)
         # Save data to a csv file
         data.to_csv(csv_data, index=False)
-        logging.info("Data saved successfuly.")
+        logging.info("Csv_data saved successfuly.")
         
         return data
     except FileNotFoundError:
@@ -84,13 +84,13 @@ def extract_data_from_tsv():
         column_names = ['Rowid', 'Timestamp', 'Anonymized_vehicle_number', 'Vehicle_type', 'Number_of_axles', 'Tollplaza_id', 'Tollplaza_code']
         # Reading the tsv file.
         data = pd.read_csv(tsv_file_path, delimiter='\t', names=column_names)
-        logging.info("Reading TSV file from: %s", tsv_file_path)
+        logging.info("TSV file successfully read from: %s", tsv_file_path)
         # For this data, we only need the last three columns, so I am removing the first 4 columns because they already exist in the csv data.
         data = data.drop(['Rowid', 'Timestamp', 'Anonymized_vehicle_number', 'Vehicle_type'], axis=1)
         
         # Save data to a csv file
         data.to_csv(tsv_data, index=False)
-        logging.info("Data saved successfuly.")
+        logging.info("Tsv_data data saved as a csv file successfuly.")
         
         return data
     except FileNotFoundError:
@@ -112,11 +112,11 @@ def extract_data_from_txt():
         column_names = ['Type_of_payment', 'Vehicle Code']
         # Read the fixed-width file
         data = pd.read_fwf(txt_file_path, index=False, colspecs=colspecs, names=column_names)
-        logging.info("Reading TXT file from: %s", txt_file_path)
+        logging.info("TXT file successfully read from: %s", txt_file_path)
         
         # Save data to a csv file
         data.to_csv(fixed_width_data, index=False)
-        logging.info("Data saved successfuly.")
+        logging.info("Fixed_width_data saved successfuly as csv file.")
 
         return data
     except FileNotFoundError:
@@ -130,19 +130,22 @@ extract_data_from_txt()
 
 # Function to consolidate the newly created csv files into a single file
 def consolidate_data():
-
+    try:
     # Read the csv files
-    csv_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/vehicle-data.csv')
-    tsv_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/tollplaza-data.csv')
-    fixed_width_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/payment-data.csv')
+        csv_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/vehicle-data.csv')
+        tsv_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/tollplaza-data.csv')
+        fixed_width_data = pd.read_csv('/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/payment-data.csv')
 
-    # Merge the data
-    data = pd.concat([csv_data, tsv_data, fixed_width_data], axis=1)
+        # Merge the data
+        data = pd.concat([csv_data, tsv_data, fixed_width_data], axis=1)
+        logging.info("Files merged successfully")
 
-    # Save the data to a csv file
-    data.to_csv(final_csv_file, index=False)
+        # Save the data to a csv file
+        data.to_csv(final_csv_file, index=False)
+        logging.info("Final data saved successfuly as a csv file.")
 
-    return data
+        return data
+    except 
 
 # call the function
 consolidate_data()
