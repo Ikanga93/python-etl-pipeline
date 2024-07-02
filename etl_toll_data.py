@@ -16,7 +16,7 @@ from sqlalchemy import create_engine, text
 from datetime import datetime
 from datetime import timedelta
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(filename='/Users/jbshome/Desktop/python-etl-pipeline/logs/log_file.log', level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 # Define the paths to the csv, tsv, fixed width and consolidated data.
 csv_data = '/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/vehicle-data.csv'
