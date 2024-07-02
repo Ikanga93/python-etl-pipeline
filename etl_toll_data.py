@@ -10,10 +10,13 @@ import tarfile
 import pandas as pd
 import glob
 import csv
+import logging
 import psycopg2
 from sqlalchemy import create_engine, text
 from datetime import datetime
 from datetime import timedelta
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 # Define the paths to the csv, tsv, fixed width and consolidated data.
 csv_data = '/Users/jbshome/Desktop/python-etl-pipeline/files/files_to_csv/vehicle-data.csv'
@@ -24,15 +27,18 @@ cleaned_final_csv_file = '/Users/jbshome/Desktop/python-etl-pipeline/files/final
 
 # Function to unzip data
 def unzip_data():
-    # Define paths
-    source_file = '/Users/jbshome/Desktop/python-etl-pipeline/staging/tolldata.tgz'
-    destination_folder = '/Users/jbshome/Desktop/python-etl-pipeline/destination_folder'
+    try:
+        # Define paths
+        source_file = '/Users/jbshome/Desktop/python-etl-pipeline/staging/tolldata.tgz'
+        destination_folder = '/Users/jbshome/Desktop/python-etl-pipeline/destination_folder'
+    
+        with tarfile.open(source_file, 'r:gz') as tar:
+                tar.extractall(destination_folder)
+                print(f"Extraction complete. Files extracted to {destination_folder}")
 
-    with tarfile.open(source_file, 'r:gz') as tar:
-            tar.extractall(destination_folder)
-            print(f"Extraction complete. Files extracted to {destination_folder}")
+        return
+    except:
 
-    return
 
 # call the function
 unzip_data()
