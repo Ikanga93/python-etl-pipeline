@@ -173,11 +173,24 @@ consolidate_data()
 # Function to transform the data
 # With this data, I only need to transform by making the column vehicle type to uppercase and add _ to the Rowid column and vehicle code.
 def transform_data(file_path):
-    df = pd.read_csv(file_path)
-    df['Vehicle_type'] = df['Vehicle_type'].str.upper()
-    df = df.rename(columns={'Rowid': 'Row_id', 'Vehicle Code': 'Vehicle_code'})
-    df.to_csv(cleaned_final_csv_file, index=False)
-    return df
+    try:
+        df = pd.read_csv(file_path)
+        logging.info("File successfully read")
+        df['Vehicle_type'] = df['Vehicle_type'].str.upper()
+        df = df.rename(columns={'Rowid': 'Row_id', 'Vehicle Code': 'Vehicle_code'})
+        df.to_csv(cleaned_final_csv_file, index=False)
+        logging.info("df successfully parsed")
+        return df
+    # Catches errors if the CSV file is empty.
+    except pd.errors.EmptyDataError as e:
+        logging.error("Empty data error: %s", e)
+    #  Catches errors if there are issues parsing the CSV file.
+    except pd.errors.ParserError as e:
+        logging.error("Parsing error: %s", e)
+    # Catches any other exceptions not covered by the specific ones.
+    except Exception as e:
+        logging.error("An error occurred: %s", e)
+
 
 # Call the function
 print(transform_data(final_csv_file))
@@ -191,45 +204,59 @@ def load_data():
         'password': 'D2racine4ac#',
         'port': '5432'
     }
-    # Connect to the database 
-    conn = psycopg2.connect(**db_params)
-    cur = conn.cursor()
 
-    # Create the table
-    cur.execute("""
-        CREATE TABLE toll_data_01 (
-                Row_id INT,
-                Timestamp TIMESTAMP,
-                Anonymized_vehicle_number INT,
-                Vehicle_type VARCHAR(255),
-                Number_of_axles INT,
-                Tollplaza_id INT,
-                Tollplaza_code VARCHAR(255),
-                Type_of_payment VARCHAR(255),
-                Vehicle_code VARCHAR(255) 
-        );
-    """)
+    try:
 
-    # Open the cleaned csv file
-    with open(cleaned_final_csv_file, 'r') as f:
-        reader = csv.reader(f)
-        next(reader) # Skip the header row
-        for row in reader:
-            cur.execute(
-                "INSERT INTO toll_data_01 (Row_id, Timestamp, Anonymized_vehicle_number, Vehicle_type, Number_of_axles, Tollplaza_id, Tollplaza_code, Type_of_payment, Vehicle_code) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                row
-            )
+        # Connect to the database 
+        conn = psycopg2.connect(**db_params)
+        cur = conn.cursor()
+        logging.info("Database connection established")
 
-    # Commit the transaction
-    conn.commit()
+        # Create the table
+        cur.execute("""
+            CREATE TABLE toll_data_01 (
+                    Row_id INT,
+                    Timestamp TIMESTAMP,
+                    Anonymized_vehicle_number INT,
+                    Vehicle_type VARCHAR(255),
+                    Number_of_axles INT,
+                    Tollplaza_id INT,
+                    Tollplaza_code VARCHAR(255),
+                    Type_of_payment VARCHAR(255),
+                    Vehicle_code VARCHAR(255) 
+            );
+        """)
+        logging.info("Table created successfully or already exists")
 
-    # Close the connection
-    cur.close()
-    conn.close()
+        # Open the cleaned csv file
+        with open(cleaned_final_csv_file, 'r') as f:
+            reader = csv.reader(f)
+            next(reader) # Skip the header row
+            for row in reader:
+                cur.execute(
+                    "INSERT INTO toll_data_01 (Row_id, Timestamp, Anonymized_vehicle_number, Vehicle_type, Number_of_axles, Tollplaza_id, Tollplaza_code, Type_of_payment, Vehicle_code) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    row
+                )
+        logging.info("Data inserted into the table successfully")
 
-    print('Data loaded to the database successfully')
+        # Commit the transaction
+        conn.commit()
+        logging.info("Transction committed")
+    
+    except psycopg2.DatabaseError as e:
+        logging.error("Database error: %s", e)
+    except FileNotFoundError as e:
+        logging.error("File not found: %s", e)
+    except Exception as e:
+        logging.error("An error occurred: %s", e)
+    finally:
+        # Close the connection
+        if conn:
+            cur.close()
+            conn.close()
+            logging.info("Database connection closed")
 
     return
 
-# Call the function
-# load_data()
+    # Call the function
+    # load_data()
