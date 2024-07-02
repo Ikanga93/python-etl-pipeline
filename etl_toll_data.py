@@ -39,10 +39,13 @@ def unzip_data():
                 logging.info(f"Extraction complete. Files extracted to {destination_folder}")
 
         return
+    # Catches the case where the source file does not exist.
     except FileNotFoundError:
         logging.error(f"Source file not found: {source_file}")
+    # Catches errors related to reading the tar file.
     except tarfile.ReadError:
         logging.error(f"Failed to read tar file: {source_file}")
+    # Catches any other unexpected errors and logs the exception message.
     except Exception as e:
         logging.error(f"Could not extract the files from the compressed tgz file. Error: {e}")
 
@@ -65,10 +68,13 @@ def extract_data_from_csv():
         logging.info("Csv_data saved successfuly.")
         
         return data
+    # Catches cases where the CSV file does not exist.
     except FileNotFoundError:
         logging.info("CSV file not found: %s", csv_file_path)
+    # Catches errors related to parsing the CSV file.
     except pd.errors.ParserError:
         logging.info("Error parsing CSV file: %s", csv_file_path)
+    # Catches any other unexpected errors and logs the exception message.
     except Exception as e:
         logging.info("An error occurred: %s", str(e))
 
@@ -93,10 +99,13 @@ def extract_data_from_tsv():
         logging.info("Tsv_data data saved as a csv file successfuly.")
         
         return data
+    # Catches cases where the TSV file does not exist.
     except FileNotFoundError:
         logging.info("TSV file not found: %s", tsv_file_path)
+    # Catches errors related to parsing the TSV file.
     except pd.errors.ParserError:
         logging.info("Error parsing TSV file: %s", tsv_file_path)
+    # Catches any other unexpected errors and logs the exception message.
     except Exception as e:
         logging.info("An error occurred: %s", str(e)) 
 # call the function
@@ -119,10 +128,13 @@ def extract_data_from_txt():
         logging.info("Fixed_width_data saved successfuly as csv file.")
 
         return data
+    # Catches cases where the TSV file does not exist.
     except FileNotFoundError:
         logging.info("TXT file not found: %s", txt_file_path)
+    # Catches errors related to parsing the TXT file.
     except pd.errors.ParserError:
         logging.info("Error parsing TXT file: %s", txt_file_path)
+    # Catches any other unexpected errors and logs the exception message.
     except Exception as e:
         logging.info("An error occurred: %s", str(e)) 
 # call the function
@@ -145,7 +157,15 @@ def consolidate_data():
         logging.info("Final data saved successfuly as a csv file.")
 
         return data
-    except 
+    # Catches errors if a file is not found.
+    except FileNotFoundError as e:
+        logging.error("File not found: %s", e)
+    # Catches errors if there are issues parsing the CSV files.
+    except pd.errors.ParserError as e:
+        logging.error("Parsing error: %s", e)
+    # Catches any other exceptions not covered by the specific ones.
+    except Exception as e:
+        logging.error("An error occurred: %s", e)
 
 # call the function
 consolidate_data()
