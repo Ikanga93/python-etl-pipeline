@@ -55,9 +55,9 @@ def extract_data_from_csv():
         # Define path and column names
         csv_file_path = "/Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/vehicle-data.csv"
         column_names = ["Rowid", "Timestamp", "Anonymized_vehicle_number", "Vehicle_type", "Number_of_axles", "Vehicle_code"]
-        logging.info("Reading CSV file from: %s", csv_file_path)
         # Reading the csv file.
         data = pd.read_csv(csv_file_path, names=column_names)
+        logging.info("Reading CSV file from: %s", csv_file_path)
         # For this data, we only need the first 4 columns. That is why i first named the columns to safely remove the columns I do not need.
         data = data.drop(["Number_of_axles", "Vehicle_code"], axis=1)
         # Save data to a csv file
@@ -82,9 +82,9 @@ def extract_data_from_tsv():
         # Define path and column names
         tsv_file_path = '/Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/tollplaza-data.tsv'
         column_names = ['Rowid', 'Timestamp', 'Anonymized_vehicle_number', 'Vehicle_type', 'Number_of_axles', 'Tollplaza_id', 'Tollplaza_code']
-        logging.info("Reading TSV file from: %s", tsv_file_path)
         # Reading the tsv file.
         data = pd.read_csv(tsv_file_path, delimiter='\t', names=column_names)
+        logging.info("Reading TSV file from: %s", tsv_file_path)
         # For this data, we only need the last three columns, so I am removing the first 4 columns because they already exist in the csv data.
         data = data.drop(['Rowid', 'Timestamp', 'Anonymized_vehicle_number', 'Vehicle_type'], axis=1)
         
@@ -93,24 +93,38 @@ def extract_data_from_tsv():
         logging.info("Data saved successfuly.")
         
         return data
+    except FileNotFoundError:
+        logging.info("TSV file not found: %s", tsv_file_path)
+    except pd.errors.ParserError:
+        logging.info("Error parsing TSV file: %s", tsv_file_path)
+    except Exception as e:
+        logging.info("An error occurred: %s", str(e)) 
 # call the function
 extract_data_from_tsv()
 
 # Function to extract data from the txt file
 def extract_data_from_txt():
-    txt_file_path = '/Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/payment-data.txt'
-    # Defining column widths.
-    colspecs = [(57, 61), (62, -1)]
-    # Defining the column names because they are not included in the file.
-    column_names = ['Type_of_payment', 'Vehicle Code']
-    # Read the fixed-width file
-    data = pd.read_fwf(txt_file_path, index=False, colspecs=colspecs, names=column_names)
-    
-    # Save data to a csv file
-    data.to_csv(fixed_width_data, index=False)
+    try:
+        txt_file_path = '/Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/payment-data.txt'
+        # Defining column widths.
+        colspecs = [(57, 61), (62, -1)]
+        # Defining the column names because they are not included in the file.
+        column_names = ['Type_of_payment', 'Vehicle Code']
+        # Read the fixed-width file
+        data = pd.read_fwf(txt_file_path, index=False, colspecs=colspecs, names=column_names)
+        logging.info("Reading TXT file from: %s", txt_file_path)
+        
+        # Save data to a csv file
+        data.to_csv(fixed_width_data, index=False)
+        logging.info("Data saved successfuly.")
 
-    return data
-
+        return data
+    except FileNotFoundError:
+        logging.info("TXT file not found: %s", txt_file_path)
+    except pd.errors.ParserError:
+        logging.info("Error parsing TXT file: %s", txt_file_path)
+    except Exception as e:
+        logging.info("An error occurred: %s", str(e)) 
 # call the function
 extract_data_from_txt()
 
