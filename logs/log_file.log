@@ -24,3 +24,16 @@
 2024-07-02 18:48:19,610 [INFO] Final data saved successfuly as a csv file.
 2024-07-02 18:48:19,627 [INFO] File successfully read
 2024-07-02 18:48:19,664 [INFO] df successfully parsed
+2024-07-02 21:28:26,857 [INFO] Source_file was successfuly reached.
+2024-07-02 21:28:26,858 [INFO] Data sent to destination folder.
+2024-07-02 21:28:26,878 [INFO] Extraction complete. Files extracted to /Users/jbshome/Desktop/python-etl-pipeline/destination_folder
+2024-07-02 21:28:26,910 [INFO] CSV file successfully read from: /Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/vehicle-data.csv
+2024-07-02 21:28:26,936 [INFO] Csv_data saved successfuly.
+2024-07-02 21:28:26,952 [INFO] TSV file successfully read from: /Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/tollplaza-data.tsv
+2024-07-02 21:28:26,965 [INFO] Tsv_data data saved as a csv file successfuly.
+2024-07-02 21:28:26,992 [INFO] TXT file successfully read from: /Users/jbshome/Desktop/python-etl-pipeline/files/destination_folder/payment-data.txt
+2024-07-02 21:28:26,999 [INFO] Fixed_width_data saved successfuly as csv file.
+2024-07-02 21:28:27,019 [INFO] Files merged successfully
+2024-07-02 21:28:27,053 [INFO] Final data saved successfuly as a csv file.
+2024-07-02 21:28:27,070 [INFO] File successfully read
+2024-07-02 21:28:27,105 [INFO] df successfully parsed
