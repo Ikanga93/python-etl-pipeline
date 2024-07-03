@@ -14,6 +14,8 @@ A compressed archive file that contains multiple files such as a csv file, tsv f
 
 # The Process(Unzipping the file)
 
-# First function
+FIRST FUNCTION
+
 The function starts by specifying the source file path and the destination folder. It attempts to open and extract the contents of the tarball file to the specified destination folder, logging successful access to the source file and successful extraction to the destination folder. The function includes error handling to manage potential issues: it logs an error if the source file is not found (FileNotFoundError), if there is a problem reading the tar file (tarfile.ReadError), or if any other unexpected error occurs, logging the exception message. The function concludes by calling unzip_data to execute the defined extraction process.
 
+SECOND FUNCTION
